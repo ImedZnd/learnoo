@@ -1,0 +1,63 @@
+# Weekly dependency update pull requests against `develop`.
+# Every update goes through the normal `verify` check and code-owner review;
+# nothing is merged automatically. A 7-day cooldown skips releases younger
+# than a week, so a compromised or broken release has time to be withdrawn.
+version: 2
+
+updates:
+  # Workflow actions are pinned to commit SHAs; Dependabot updates the SHA
+  # and the version comment together.
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Go server and renderer (pgx, x/crypto).
+  - package-ecosystem: gomod
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      go-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Renderer experiment: KaTeX (served locally) and Playwright.
+  - package-ecosystem: npm
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      root-npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Studio prototype. TipTap packages share one version and must move together.
+  - package-ecosystem: npm
+    directory: /web/studio
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    groups:
+      tiptap:
+        patterns: ["@tiptap/*"]
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      studio-minor-and-patch:
+        update-types: [minor, patch]
