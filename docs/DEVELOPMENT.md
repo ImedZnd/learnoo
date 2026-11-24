@@ -168,6 +168,10 @@ Security: the workflow uses the `pull_request` trigger (never `pull_request_targ
 
 `design:check` runs before `assets` on purpose: `assets` regenerates the design files, so checking afterwards would hide generated CSS that was not committed. Making `verify` a required status check in branch protection is a maintainer setting and is not changed by the workflow.
 
+### Dependency updates
+
+[`.github/dependabot.yml`](../.github/dependabot.yml) opens weekly update pull requests against `develop` for GitHub Actions, Go modules, the root npm packages and `web/studio`. Releases younger than seven days are skipped. TipTap and React packages are grouped so they move together; other minor and patch updates are grouped per ecosystem, and major updates arrive as separate pull requests. Nothing merges automatically: each update runs `verify` and needs the code owner's review. When an update changes a version named in this file or the README (for example KaTeX or Playwright), update that text in the same pull request.
+
 ### Security limits
 
 Schema allowlists, escaped templates, local image allowlists, content/depth/formula limits, CSP, same-origin preview checks, and KaTeX `trust: false` reduce rendering risks. They do not establish production security. The only HTTP mutation is a read-only rendering request; browser saves are local fixtures. Authentication, durable storage, role checks, review and publication invariants belong to later work and remain required for the real platform.
